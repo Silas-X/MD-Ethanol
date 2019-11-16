@@ -2,27 +2,50 @@
 #include <string>
 using std::string;
 
-AtomBase::AtomBase(int _typeNbr, ChargeType _charge, MassType _mass, NameType _name)
+AtomBase::AtomBase(ChargeType _charge, MassType _mass, NameType _name)
 {
-    typeNbr = _typeNbr;
     name = _name;
     charge = _charge;
     mass = _mass;
 }
-
+AtomBase::AtomBase(const AtomBase &origin)
+{
+    // this->mass = origin.mass;
+    //this->charge = origin.charge;
+    //this->name = origin.name;
+    *this = origin;
+}
 AtomBase::~AtomBase() {}
 
 //Accessor
-int AtomBase::GetTypeNbr() const { return typeNbr; }
 NameType AtomBase::GetName() const { return name; }
 ChargeType AtomBase::GetCharge() const { return charge; }
 MassType AtomBase::GetMass() const { return mass; }
 
 //Mutator
 
-Atom::Atom(int typeNbr, ChargeType charge, MassType mass, Location pos, NameType name)
-    : AtomBase(typeNbr, charge, mass, name), Location(pos){number++;};
+bool AtomBase::SetCharge(const double charge)
+{
+    this->charge= charge;
+    return true;
+}
+AtomBase &AtomBase::operator=(const AtomBase &origin)
+{
+    if (this == &origin)
+        return *this;
+    this->mass = origin.mass;
+    this->charge = origin.charge;
+    this->name = origin.name;
+    return *this;
+}
+
+Atom::Atom(int _typeNbr, ChargeType charge, MassType mass, Location pos, NameType name)
+    : typeNbr(_typeNbr), AtomBase(charge, mass, name), Location(pos)
+{
+    number++;
+};
 
 Atom::~Atom(){};
 
+int Atom::GetTypeNbr() const { return typeNbr; }
 int Atom::number = 0;
